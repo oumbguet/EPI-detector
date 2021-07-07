@@ -8,13 +8,26 @@ import threading
 import cv2
 import time
 from Detector import EPIDetector
+from  argparse import ArgumentParser, SUPPRESS
+
+def build_argparser():
+    parser = ArgumentParser()
+    args = parser.add_argument_group('Options')
+    args.add_argument('-m', '--model', help="Path to an .xml file, representing a trained person detector SSD model.", required=True, type=str)
+    args.add_argument('-c', '--classification', help="Path to an .xml file, representing a trained classification model.", required=True, type=str)
+    args.add_argument('-d', '--device', help="CPU, GPU, MYRIAD.", default="CPU", type=str)
+    args.add_argument('-i', '--input', help="Input video source.", default="0", type=str)
+
+    return parser
 
 class Window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
 
+        self.args = build_argparser().parse_args()
+
         self.result = {}
-        self.detector = EPIDetector(0, ".\person_model\person-detection-retail-0013.xml", ".\classification\main_model.xml", "CPU")
+        self.detector = EPIDetector((0 if self.args.input == "0" else self.args.input), self.args.model, self.args.classification, self.args.device)
 
         self.frame = QLabel()
         self.stopped = {'bool': False}
