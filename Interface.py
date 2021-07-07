@@ -17,6 +17,7 @@ def build_argparser():
     args.add_argument('-c', '--classification', help="Path to an .xml file, representing a trained classification model.", required=True, type=str)
     args.add_argument('-d', '--device', help="CPU, GPU, MYRIAD.", default="CPU", type=str)
     args.add_argument('-i', '--input', help="Input video source.", default="0", type=str)
+    args.add_argument('-r', '--ratio', help="Ratio percentage for the video output size.", default=100, type=int)
 
     return parser
 
@@ -50,6 +51,11 @@ class Window(QWidget):
 
     def change_img(self, img_inv):
         img = cv2.cvtColor(img_inv, cv2.COLOR_BGR2RGB)
+        if (self.args.ratio != 100):
+            height = int(img.shape[0] / 100 * self.args.ratio)
+            width = int(img.shape[1] / 100 * self.args.ratio)
+            dim = (width, height)
+            img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         height, width, channel = img.shape
         bpl = 3 * width
         qImg = QImage(img.data, width, height, bpl, QImage.Format_RGB888)

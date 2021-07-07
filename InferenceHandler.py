@@ -44,9 +44,7 @@ class InferenceHandler():
         self.ie = IECore()
         self.net = self.ie.read_network(model=self.model)
 
-        # KERAS
         self.class_net = self.ie.read_network(model=self.classification_model)
-        # self.classification = keras.models.load_model(self.classification_model)
         self.class_exec_net = self.ie.load_network(network=self.class_net, device_name=self.device)
 
         self.exec_net = self.ie.load_network(network=self.net, device_name=self.device)
