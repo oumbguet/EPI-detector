@@ -1,6 +1,6 @@
 # EPI-detector
 
-Openvino custom trained PPE yellow vest detector
+Openvino custom trained PPE yellow jacket detector
 
 ## Pre-requisites
 
